@@ -10,3 +10,4 @@ This repo generate multiarch container images.
 Righ now are tested and working:
 - AMD64
 - ARM64
+- s390x

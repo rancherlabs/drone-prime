@@ -18,13 +18,13 @@ The publish step will be executed when a `tag` is created on `main` branch.
 
 ### Tag naming
 Due to the characteristic of `drone` and our infra settings. We decided to follow the the next tag namming:
-**v+${version_number}+-+${component_name}**
+**${component_name}+-+v+${version_number}**
 
 The **${component_name}** will determine which folder will be selected to perform `docker build`
 
 Examples:
-- v0.0.1-manifest
-- v1.2.5-publish
+- publish-v0.0.1
+- manifest-v1.2.5
 
 ### Docker images
 The docker images are published under https://hub.docker.com/r/rancher/drone-prime/tags.
@@ -34,8 +34,9 @@ Examples:
 
 |   Git tag         |   Docker image                                |
 |:------------------|:----------------------------------------------|
-|   v0.0.1-git      |   rancher/drone-images:v0.0.1-git-s390x       |
-|   v1.2.5-slack    |   rancher/drone-images:v1.2.5-slack-s390x     |
-|   v3.20.1-docker  |   rancher/drone-images:v3.20.1-docker-s390x   |
+|   publish-v0.0.1  |   rancher/drone-prime:publish-v0.0.1          |
+|    |   rancher/drone-prime:publish-v0.0.1-linux-amd64             |
+|    |   rancher/drone-prime:publish-v0.0.1-linux-arm64             |
+|   manifest-v1.2.5 |   rancher/drone-images:manifest-v1.2.5        |
 
  

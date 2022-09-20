@@ -1,6 +1,42 @@
+kind: pipeline
+name: manifest
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: publish
+  image: plugins/docker
+  environment:
+  volumes:
+  - name: docker
+    path: /var/run/docker.sock
+  settings:
+    dockerfile: manifest/Dockerfile 
+    tag: ${DRONE_TAG#manifest-}
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: rancher/drone-prime-manifest
+  when:
+   ref:
+   - refs/tags/manifest-v*
+   instance:
+     include:
+     - drone-publish.rancher.io
+   event:
+   - tag
+
+volumes:
+- name: docker
+  host:
+    path: /var/run/docker.sock
+
 ---
 kind: pipeline
-name: build-amd64
+name: publish-amd64
 
 platform:
   os: linux
@@ -14,23 +50,21 @@ steps:
   - name: docker
     path: /var/run/docker.sock
   settings:
-    dockerfile: Docker/Dockerfile.amd64 
-    tag: ${DRONE_TAG}-linux-amd64
+    dockerfile: publish/Dockerfile.amd64 
+    tag: ${DRONE_TAG#publish-}-linux-amd64
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: luistt/drone-prime-publish
+    repo: rancher/drone-prime-publish
   when:
-	  ref:
-	    include:
-	      - refs/tags/publish-v*
-    instance:
-      include:
-      - drone-publish.rancher.io
-    event:
-    #- push
-    - tag
+   ref:
+   - refs/tags/publish-v*
+   instance:
+     include:
+     - drone-publish.rancher.io
+   event:
+   - tag
 
 volumes:
 - name: docker
@@ -39,7 +73,7 @@ volumes:
 
 ---
 kind: pipeline
-name: build-arm64
+name: publish-arm64
 
 platform:
   os: linux
@@ -53,23 +87,21 @@ steps:
   - name: docker
     path: /var/run/docker.sock
   settings:
-    dockerfile: Docker/Dockerfile.arm64 
-    tag: ${DRONE_TAG}-linux-arm64
+    dockerfile: publish/Dockerfile.arm64 
+    tag: ${DRONE_TAG#publish-}-linux-arm64
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: luistt/drone-prime-publish
+    repo: rancher/drone-prime-publish
   when:
-  	ref:
-    	include:
-      	- refs/tags/publish-v*
-    instance:
-      include:
-      - drone-publish.rancher.io
-    event:
-    #- push
-    - tag
+   ref:
+   - refs/tags/publish-v*
+   instance:
+     include:
+     - drone-publish.rancher.io
+   event:
+   - tag
 
 volumes:
 - name: docker
@@ -78,47 +110,47 @@ volumes:
 
 ---
 kind: pipeline
-name: build-windows-amd64-1809
+name: publish-s390x
 
 platform:
-  os: windows
+  os: linux
   arch: amd64
-  version: 1809
+
+node:
+  arch: s390x
 
 steps:
-- name: publish-windows-1809-amd64
-  image: plugins/docker:windows-1809-amd64
+- name: publish-s390x
+  image: rancher/drone-images:docker-s390x
   environment:
   volumes:
   - name: docker
-    path: \\\\.\\pipe\\docker_engine
+    path: /var/run/docker.sock
   settings:
-    dockerfile: Docker/Dockerfile.windows.amd64.1809
-    tag: ${DRONE_TAG}-windows-1809-amd64
+    dockerfile: publish/Dockerfile.s390x 
+    tag: ${DRONE_TAG#publish-}-linux-s390x
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: luistt/drone-prime-publish
+    repo: rancher/drone-prime-publish
   when:
-  	ref:
-    	include:
-      	- refs/tags/publish-v*
-    instance:
-      include:
-      - drone-publish.rancher.io
-    event:
-    #- push
-    - tag
+   ref:
+   - refs/tags/publish-v*
+   instance:
+     include:
+     - drone-publish.rancher.io
+   event:
+   - tag
 
 volumes:
 - name: docker
   host:
-    path: \\\\.\\pipe\\docker_engine
+    path: /var/run/docker.sock
 
 ---
 kind: pipeline
-name: manifest
+name: publish-manifest
 
 steps:
 - name: push-manifest
@@ -130,19 +162,18 @@ steps:
       from_secret: docker_password
     spec: manifest.tmpl
   when:
-  	ref:
-    	include:
-      	- refs/tags/publish-v*
-    instance:
-      include:
-      - drone-publish.rancher.io
-    event:
-    - tag
+   ref:
+   - refs/tags/publish-v*
+   instance:
+     include:
+     - drone-publish.rancher.io
+   event:
+   - tag
 
 depends_on:
-- build-amd64 
-- build-arm64
-- build-windows-amd64-1809
+- publish-amd64 
+- publish-arm64
+- publish-s390x
 
 volumes:
 - name: docker
