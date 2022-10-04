@@ -2,9 +2,7 @@ ARG GO_IMAGE=registry.suse.com/bci/golang:1.17
 ARG DIND_IMAGE=docker:20.10.17-dind
 
 FROM ${GO_IMAGE} AS build
-#ARG UPSTREAM=HTTPS://GITHUB.COM/DRONE-PLUGINS/DRONE-MANIFEST.GIT
-#ARG VERSION=V1.2.3
-ARG upstream=https://github.com/Anarkis/drone-manifest.git
+ARG upstream=https://github.com/rancherlabs/drone-manifest.git
 ARG version=v0.0.10
 ARG arch=linux-amd64
 
