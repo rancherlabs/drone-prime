@@ -19,7 +19,7 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: rancher/drone-prime-manifest
+    repo: rancherlabs/drone-prime-manifest
   when:
    ref:
    - refs/tags/manifest-v*
@@ -56,7 +56,7 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: rancher/drone-prime-publish
+    repo: rancherlabs/drone-prime-publish
   when:
    ref:
    - refs/tags/publish-v*
@@ -93,7 +93,7 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: rancher/drone-prime-publish
+    repo: rancherlabs/drone-prime-publish
   when:
    ref:
    - refs/tags/publish-v*
@@ -133,7 +133,7 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: rancher/drone-prime-publish
+    repo: rancherlabs/drone-prime-publish
   when:
    ref:
    - refs/tags/publish-v*
