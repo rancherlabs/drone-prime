@@ -1,17 +1,17 @@
-image: rancher/drone-prime-publish:{{replace "publish-" "" build.tag }}
+image: rancherlabs/drone-prime-publish:{{replace "publish-" "" build.tag }}
 manifests:
   -
-    image: rancher/drone-prime-publish:{{replace "publish-" "" build.tag }}-linux-amd64
+    image: rancherlabs/drone-prime-publish:{{replace "publish-" "" build.tag }}-linux-amd64
     platform:
       architecture: amd64
       os: linux
   -
-    image: rancher/drone-prime-publish:{{replace "publish-" "" build.tag }}-linux-arm64
+    image: rancherlabs/drone-prime-publish:{{replace "publish-" "" build.tag }}-linux-arm64
     platform:
       architecture: arm64
       os: linux
   -
-    image: rancher/drone-prime-publish:{{replace "publish-" "" build.tag }}-linux-s390x
+    image: rancherlabs/drone-prime-publish:{{replace "publish-" "" build.tag }}-linux-s390x
     platform:
       architecture: s390x
       os: linux 
